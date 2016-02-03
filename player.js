@@ -27,18 +27,18 @@ class Player {
   
   run_command() {
     if (!this.has_name) {
-      this.name = this.current_message.join('');
+      this.name = this.current_message;
       this.has_name = true;
       this.socket.write(`Nice to meet you ${this.name}!\r\n`);
       return this.socket.write('To quit the game type \\q and hit return, for the full list of commands type \\help and hit return.\r\n');
     }
     
-    if (this.current_message.join('').match(/\\c /)) {
-      this.current_message = this.current_message.join('').split('\\c ')[1];
+    if (this.current_message.match(/\\c /)) {
+      this.current_message = this.current_message.split('\\c ')[1];
       return this.game.emit(this);
     }
     
-    switch (this.current_message.join('')) {
+    switch (this.current_message) {
       case '\\q': this.socket.write('You have quit the session.\r\n');    
                   this.socket.destroy();
                   break;
@@ -46,17 +46,15 @@ class Player {
                     break;
       case '\\players': this.socket.write(`${this.game.players.length} currently online\r\n`);
                         break;
-      default: this.socket.write(`Unknown command: ${this.current_message.join('')}\r\n`);
+      default: this.socket.write(`Unknown command: ${this.current_message}\r\n`);
               break;
     }
   }
   
   on_data(data) {
-    if (data.toString() === '\r\n') {   
-      this.run_command();
-      return this.current_message = [];
-    }
-    this.current_message.push(data.toString());  
+    this.current_message = data.toString().trim();
+    this.run_command();
+    this.current_message = '';
   }
 }
 
