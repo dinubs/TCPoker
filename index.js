@@ -17,5 +17,5 @@ const server = net.createServer(function(socket) {
     }
   });
 });
-
+console.log(process.env.PORT);
 server.listen(process.env.PORT || 1337, '0.0.0.0');
