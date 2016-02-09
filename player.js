@@ -52,6 +52,9 @@ class Player {
   }
   
   on_data(data) {
+    if (data.toString().indexOf('\r\n') === -1) {
+      this.current_message = this.current_message + data.toString();
+    }
     this.current_message = data.toString().trim();
     this.run_command();
     this.current_message = '';
