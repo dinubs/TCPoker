@@ -18,4 +18,4 @@ const server = net.createServer(function(socket) {
   });
 });
 
-server.listen(process.env.PORT || 1337);
+server.listen(process.env.PORT || 1337, '0.0.0.0');
